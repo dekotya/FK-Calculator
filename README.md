@@ -15,7 +15,7 @@
 
 ### Способ 1: Установка DEB-пакета
 
-1. Скачайте последнюю версию DEB-пакета из [раздела Releases](https://github.com/ваш-username/FK-Calculator/releases)
+1. Скачайте последнюю версию DEB-пакета из [раздела Releases](https://github.com/dekotya/FK-Calculator/releases)
 2. Установите пакет:
 
 ```bash
