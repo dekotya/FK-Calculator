@@ -5,12 +5,14 @@
 RobotGLWidget::RobotGLWidget(int32_t jointCnt, QWidget* parent)
     : QOpenGLWidget(parent),
     m_jointCnt(jointCnt),
-    m_joints(jointCnt)
+    m_joints(jointCnt),
+    m_leftButtonPressed(false)
 {
-    // Инициализация GLUT (фиктивные аргументы)
     int argc = 1;
     char* argv[] = {(char*)"RobotGLWidget"};
     glutInit(&argc, argv);
+
+    m_shift.fill(0);
 }
 
 void RobotGLWidget::updateJoints(const std::vector<QVector3D>& jointPositions)
@@ -21,7 +23,7 @@ void RobotGLWidget::updateJoints(const std::vector<QVector3D>& jointPositions)
     }
 
     m_joints = jointPositions;
-    update(); //
+    update();
 }
 
 void RobotGLWidget::initializeGL()
@@ -44,29 +46,25 @@ void RobotGLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    // наблюдение
-    gluLookAt(2, 2, 2,  // Позиция камеры
-              0, 0, 0,  // Точка наблюдения
-              0, 0, 1); // Вектор "вверх"
+    glTranslatef(m_shift[0], m_shift[1], 0);
 
-    // Оси
+    gluLookAt(2, 2, 2,
+              0, 0, 0,
+              0, 0, 1);
+
     glBegin(GL_LINES);
     {
-        // X
         glColor3f(1, 0, 0);
         glVertex3f(0, 0, 0); glVertex3f(1, 0, 0);
 
-        // Y
         glColor3f(0, 1, 0);
         glVertex3f(0, 0, 0); glVertex3f(0, 1, 0);
 
-        // Z
         glColor3f(0, 0, 1);
         glVertex3f(0, 0, 0); glVertex3f(0, 0, 1);
     }
     glEnd();
 
-    // робот
     glLineWidth(3.0f);
     glBegin(GL_LINE_STRIP);
     glColor3f(1, 1, 0);
@@ -75,12 +73,43 @@ void RobotGLWidget::paintGL()
     }
     glEnd();
 
-    // суставы
     glColor3f(1, 0.5, 0);
     for (const auto& joint : m_joints) {
         glPushMatrix();
         glTranslatef(joint.x(), joint.y(), joint.z());
-        glutSolidSphere(0.05, 10, 10); // сфера в каждой точке
+        glutSolidSphere(0.05, 10, 10);
         glPopMatrix();
+    }
+}
+
+void RobotGLWidget::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        m_leftButtonPressed = true;
+        m_lastMousePos = event->position();
+    }
+}
+
+void RobotGLWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if(m_leftButtonPressed)
+    {
+        float dx = event->position().x() - m_lastMousePos.x();
+        float dy = event->position().y() - m_lastMousePos.y();
+
+        m_shift[0] += dx * 0.01f;
+        m_shift[1] -= dy * 0.01f;
+
+        m_lastMousePos = event->position();
+        update();
+    }
+}
+
+void RobotGLWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && m_leftButtonPressed)
+    {
+        m_leftButtonPressed = false;
     }
 }

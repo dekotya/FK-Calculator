@@ -20,6 +20,18 @@ JointGroupBox::JointGroupBox(QString title, QWidget *parent)
 
 void JointGroupBox::setupUi()
 {
+
+    this->setStyleSheet(
+        "QGroupBox {"
+        "    font-weight: bold;"
+        "    font-size: 14px;"
+        "}"
+        "QGroupBox::title {"
+        "    subcontrol-origin: margin;"
+        "    left: 10px;"
+        "}"
+        );
+
     QGridLayout* mainLayout = new QGridLayout(this);
 
     mainLayout->addWidget(new QLabel("theta: ", this), 0, 0);

@@ -5,7 +5,6 @@ RobotModel::RobotModel(int32_t jointCnt, QObject* parent)
     m_jointCnt(jointCnt),
     m_joints(jointCnt)
 {
-
 }
 
 int32_t RobotModel::jointCnt() const

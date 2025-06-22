@@ -39,8 +39,8 @@ void MainWindow::setupUi()
 
     for (int32_t i = 0; i < m_jointCnt; ++i) {
 
-        row = i / 2;  // Целочисленное деление
-        column = i % 2; // Остаток от деления
+        row = i / 2;
+        column = i % 2;
 
         m_jointGroupBoxes[i] = new JointGroupBox(QString("Joint %1:").arg(i + 1), this);
 
@@ -53,7 +53,24 @@ void MainWindow::setupUi()
     }
     vbLayout->addLayout(jointsLayout);
 
-    vbLayout->addWidget(new QLabel("Results: "));
+    QLabel* resultsLabel = new QLabel("Results");
+
+    QFont boldFont = resultsLabel->font();
+    boldFont.setBold(true);
+    resultsLabel->setFont(boldFont);
+    resultsLabel->setAlignment(Qt::AlignCenter);
+
+    boldFont.setBold(false);
+    boldFont.setPointSize(boldFont.pointSize() + 4);
+
+    m_Xpos->setAlignment(Qt::AlignCenter);
+    m_Xpos->setFont(boldFont);
+    m_Ypos->setAlignment(Qt::AlignCenter);
+    m_Ypos->setFont(boldFont);
+    m_Zpos->setAlignment(Qt::AlignCenter);
+    m_Zpos->setFont(boldFont);
+
+    vbLayout->addWidget(resultsLabel);
     vbLayout->addWidget(m_Xpos);
     vbLayout->addWidget(m_Ypos);
     vbLayout->addWidget(m_Zpos);

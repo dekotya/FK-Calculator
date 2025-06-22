@@ -2,6 +2,7 @@
 
 #include <QOpenGLWidget>
 #include <QVector3D>
+#include <QMouseEvent>
 
 class RobotGLWidget : public QOpenGLWidget
 {
@@ -16,7 +17,17 @@ protected:
     void resizeGL(int w, int h) override;
     void paintGL() override;
 
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 private:
-    std::vector<QVector3D> m_joints; // Позиции суставов
+    std::vector<QVector3D> m_joints;
     int32_t m_jointCnt;
+
+    QPointF m_lastMousePos;
+    std::array<float, 2> m_shift;
+
+    bool m_leftButtonPressed;
+
 };

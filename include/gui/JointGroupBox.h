@@ -35,5 +35,5 @@ private:
     QDoubleSpinBox* m_spinBoxD;
 
     QComboBox* m_comboBoxAlpha;
-    QMap<double, QString> m_alphaMap; // Хранит соответствия
+    QMap<double, QString> m_alphaMap;
 };
